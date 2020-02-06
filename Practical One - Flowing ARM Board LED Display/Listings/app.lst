@@ -1,0 +1,179 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             AsmTemplate, CODE, READONLY
+    2 00000000                 IMPORT           main
+    3 00000000         
+    4 00000000         ; sample program makes the 4 LEDs P1.16, P1.17, P1.18, P
+                       1.19 go on and off in sequence
+    5 00000000         ; (c) Mike Brady, 2011 -- 2019.
+    6 00000000         
+    7 00000000                 EXPORT           start
+    8 00000000         start
+    9 00000000         
+   10 00000000 E0028018 
+                       IO1DIR  EQU              0xE0028018
+   11 00000000 E0028014 
+                       IO1SET  EQU              0xE0028014
+   12 00000000 E002801C 
+                       IO1CLR  EQU              0xE002801C
+   13 00000000         
+   14 00000000 E59F1040        ldr              r1,=IO1DIR
+   15 00000004 E3A0280F        ldr              r2,=0x000f0000 ;select P1.19--P
+                                                            1.16
+   16 00000008 E5812000        str              r2,[r1]     ;make them outputs
+   17 0000000C E59F1038        ldr              r1,=IO1SET
+   18 00000010 E5812000        str              r2,[r1]     ;set them to turn t
+                                                            he LEDs off
+   19 00000014 E59F2034        ldr              r2,=IO1CLR
+   20 00000018         ; r1 points to the SET register
+   21 00000018         ; r2 points to the CLEAR register
+   22 00000018         
+   23 00000018 E3A05601        ldr              r5,=0x00100000 ; end when the m
+                                                            ask reaches this va
+                                                            lue
+   24 0000001C E3A03801 
+                       wloop   ldr              r3,=0x00010000 
+                                                            ; start with P1.16.
+                                                            
+   25 00000020 E5823000 
+                       floop   str              r3,[r2]     ; clear the bit -> 
+                                                            turn on the LED
+   26 00000024         
+   27 00000024         ;delay for about a half second
+   28 00000024 E59F4028        ldr              r4,=1600000
+   29 00000028 E2544001 
+                       dloop   subs             r4,r4,#1
+   30 0000002C 1AFFFFFD        bne              dloop
+   31 00000030         
+   32 00000030 E5813000        str              r3,[r1]     ;set the bit -> tur
+                                                            n off the LED
+   33 00000034 E1A03083        mov              r3,r3,lsl #1 ;shift up to next 
+                                                            bit. P1.16 -> P1.17
+                                                             etc.
+   34 00000038 E1530005        cmp              r3,r5
+   35 0000003C 1AFFFFF7        bne              floop
+   36 00000040 EAFFFFF5        b                wloop
+   37 00000044 EAFFFFFE 
+                       stop    B                stop
+   38 00000048         
+   39 00000048                 END
+              E0028018 
+              E0028014 
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+              E002801C 
+              00186A00 
+Command Line: --debug --xref --diag_suppress=9931 --apcs=interwork --depend=.\a
+pp.d -o.\app.o -IC:\Keil_v5\ARM\RV31\INC -IC:\Keil_v5\ARM\CMSIS\Include -IC:\Ke
+il_v5\ARM\Inc\Philips --predefine="__EVAL SETA 1" --predefine="__MICROLIB SETA 
+1" --predefine="__UVISION_VERSION SETA 516" --list=.\listings\app.lst App.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+AsmTemplate 00000000
+
+Symbol: AsmTemplate
+   Definitions
+      At line 1 in file App.s
+   Uses
+      None
+Comment: AsmTemplate unused
+dloop 00000028
+
+Symbol: dloop
+   Definitions
+      At line 29 in file App.s
+   Uses
+      At line 30 in file App.s
+Comment: dloop used once
+floop 00000020
+
+Symbol: floop
+   Definitions
+      At line 25 in file App.s
+   Uses
+      At line 35 in file App.s
+Comment: floop used once
+start 00000000
+
+Symbol: start
+   Definitions
+      At line 8 in file App.s
+   Uses
+      At line 7 in file App.s
+Comment: start used once
+stop 00000044
+
+Symbol: stop
+   Definitions
+      At line 37 in file App.s
+   Uses
+      At line 37 in file App.s
+Comment: stop used once
+wloop 0000001C
+
+Symbol: wloop
+   Definitions
+      At line 24 in file App.s
+   Uses
+      At line 36 in file App.s
+Comment: wloop used once
+6 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+IO1CLR E002801C
+
+Symbol: IO1CLR
+   Definitions
+      At line 12 in file App.s
+   Uses
+      At line 19 in file App.s
+Comment: IO1CLR used once
+IO1DIR E0028018
+
+Symbol: IO1DIR
+   Definitions
+      At line 10 in file App.s
+   Uses
+      At line 14 in file App.s
+Comment: IO1DIR used once
+IO1SET E0028014
+
+Symbol: IO1SET
+   Definitions
+      At line 11 in file App.s
+   Uses
+      At line 17 in file App.s
+Comment: IO1SET used once
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+main 00000000
+
+Symbol: main
+   Definitions
+      At line 2 in file App.s
+   Uses
+      None
+Comment: main unused
+1 symbol
+345 symbols in table
